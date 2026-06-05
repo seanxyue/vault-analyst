@@ -102,6 +102,7 @@ def index_description(index_file: Path) -> str:
         text = index_file.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return ""
+    text = text.replace("\r\n", "\n").replace("\r", "\n")  # tolerate CRLF vaults synced from Windows
     body = re.sub(r"^---\n.*?\n---\n", "", text, flags=re.DOTALL)
     for line in body.splitlines():
         line = line.strip()

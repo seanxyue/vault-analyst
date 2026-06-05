@@ -124,13 +124,17 @@ if command -v crontab >/dev/null 2>&1; then
       cron_line="45 4 * * * /usr/bin/env python3 \"$INSTALL_DIR/scripts/generate_vault_index.py\" --config \"$CONFIG\" >> \"$INSTALL_DIR/cron.log\" 2>&1"
       existing="$(crontab -l 2>/dev/null || true)"
       backup="$INSTALL_DIR/crontab.backup.$(date +%Y%m%d%H%M%S)"
-      printf '%s\n' "$existing" > "$backup"
-      if printf '%s\n' "$existing" | grep -vF "generate_vault_index.py" | { cat; printf '%s\n' "$cron_line"; } | crontab -; then
+      if [ -n "$existing" ]; then printf '%s\n' "$existing" > "$backup"; else : > "$backup"; fi
+      # filter out any previous vault-analyst entry; grep exits 1 when nothing survives, which is fine
+      filtered="$(printf '%s\n' "$existing" | grep -vF "generate_vault_index.py" || true)"
+      if { [ -n "$filtered" ] && printf '%s\n' "$filtered"; printf '%s\n' "$cron_line"; } | crontab -; then
         cron_installed=yes
         say "  Cron installed (backup of your previous crontab: $backup)"
       else
         say "  WARNING: failed to write crontab — restoring backup."
-        crontab "$backup" || say "  Restore failed too; your previous crontab is saved at $backup"
+        if [ -s "$backup" ]; then
+          crontab "$backup" || say "  Restore failed too; your previous crontab is saved at $backup"
+        fi
       fi
       ;;
   esac

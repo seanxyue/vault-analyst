@@ -33,7 +33,7 @@ def render(text: str, mapping: dict) -> str:
 
 
 def check_no_orphans(text: str, name: str):
-    orphans = re.findall(r"\{\{[A-Z_]+\}\}", text)
+    orphans = re.findall(r"\{\{[^}]+\}\}", text)
     if orphans:
         print(f"ERROR: unrendered tokens in {name}: {', '.join(sorted(set(orphans)))}", file=sys.stderr)
         sys.exit(1)

@@ -1,0 +1,34 @@
+# Vault Profile — generated {{GENERATED_DATE}}
+
+Measured against the vault at `{{VAULT_PATH}}` by the vault-analyst installer. Re-run `install.sh` to refresh after big vault changes.
+
+## Vault shape
+
+- Total notes: {{TOTAL_NOTES}} ({{ROOT_NOTES}} loose at vault root)
+- Untagged (no frontmatter): {{UNTAGGED_PCT}}% overall — frontmatter search misses these; see strategy note below.
+
+## Frontmatter field coverage
+
+How reliably each field exists across the vault. Fields with high coverage are good grep filters; low-coverage fields are precision bonuses only.
+
+{{PROFILE_TABLE}}
+
+**Strategy implication:** {{STRATEGY_NOTE}}
+
+## Slice map — biggest branches
+
+Branches large enough to need splitting or fan-out (see SKILL.md step 3).
+
+{{SLICE_TABLE}}
+
+## Low-priority branches
+
+Skip these unless the question is explicitly about them:
+
+{{LOW_PRIORITY_LIST}}
+
+## Quirks (add your own)
+
+Things the skill should know about THIS vault that can't be measured automatically — projects that moved, folders with misleading names, content that looks like knowledge but isn't. Edit this file directly; the installer preserves this section on re-runs only if you re-add it (re-running overwrites this file — copy your quirks out first or decline the overwrite).
+
+- (none yet — add bullets here)

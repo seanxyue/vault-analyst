@@ -1,0 +1,58 @@
+---
+name: vault-analyst
+description: Analyze across your Obsidian vault — use when reviewing multiple notes or SOPs, comparing documents, running cross-domain analysis, answering "what do I know about X", "check across my notes", "summarize everything about", or any question that spans more than a handful of vault files or where the answer's location is unknown. Routes via the generated vault index, filters by frontmatter, and fans out subagents for large analyses.
+---
+
+# Vault Analyst — read the whole vault, miss nothing
+
+Analyze across the Obsidian vault. The vault IS the knowledge base; this skill is the reader.
+
+## Vault location
+
+`{{VAULT_PATH}}`
+
+Top-level folders: {{TOP_FOLDERS}}
+
+## The procedure — always in this order
+
+### 1. Route — read the index first
+
+Read `_vault-index.md` at the vault root. It maps every branch with note counts and links to per-folder `_index.md` files where they exist. Pick the branches relevant to the question — never start with a vault-wide grep.
+
+**Staleness check:** the index header shows its regeneration date. If older than 7 days, regenerate it first by running:
+
+```
+python3 "{{GENERATOR_PATH}}"
+```
+
+(The generator reads its config from the file next to it; no arguments needed.)
+
+### 2. Filter — frontmatter before body text
+
+Notes may carry YAML frontmatter. Which fields actually exist in THIS vault — and how reliably — is measured in [references/vault-profile.md](references/vault-profile.md). Read it before choosing a search strategy:
+
+- If a field has high coverage there, grep that field first (`^fieldname:.*term`) — curated metadata beats noisy body text.
+- If coverage is low or the vault is mostly untagged, skip frontmatter filtering and go straight to body-text search plus whole-slice reads.
+
+Generic search patterns: [references/retrieval-recipes.md](references/retrieval-recipes.md)
+
+### 3. Read or fan out — by slice size
+
+| Relevant slice | Action |
+|---|---|
+| < 30 notes | Read them directly in this session |
+| 30–150 notes | One read-only subagent reads the WHOLE slice (no retrieval risk) |
+| > 150 notes, or spans 2+ top folders | Fan out 3–5 read-only subagents, one per branch/subfolder |
+
+Fan-out rules:
+- Slice by the index's branches; split big branches by subfolder so slices are balanced (see the slice map in vault-profile.md).
+- Every subagent prompt must include: the question, its exact slice (paths), and the return contract below.
+- Subagents return **structured extracts, never note dumps**: ≤25 bullets, each bullet = finding + vault path. Include contradictions and gaps, not just confirmations.
+
+### 4. Validate — cite or it didn't happen
+
+Every claim in the final analysis must cite vault-relative paths. If a claim has no path, delete it or mark it as inference. If two notes contradict, surface the contradiction with both paths — do not silently pick one.
+
+## Vault-specific notes
+
+Low-priority branches (skip unless asked), measured field coverage, the slice map, and user-added quirks all live in [references/vault-profile.md](references/vault-profile.md) — regenerate it by re-running the installer if the vault's structure changes substantially.

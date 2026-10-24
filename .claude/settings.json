@@ -6,7 +6,19 @@
       "mcp__Notion__notion-update-page",
       "mcp__Notion__notion-create-pages",
       "mcp__Notion__notion-create-comment",
-      "mcp__Notion__notion-get-comments"
+      "mcp__Notion__notion-get-comments",
+      "mcp__Notion__*",
+      "mcp__Google_Drive__*",
+      "mcp__Google_Docs__*",
+      "mcp__Google_Sheets__*",
+      "Bash",
+      "Edit",
+      "Write",
+      "Read",
+      "Glob",
+      "Grep",
+      "WebSearch",
+      "WebFetch"
     ]
   }
 }

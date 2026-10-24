@@ -18,7 +18,13 @@
       "Glob",
       "Grep",
       "WebSearch",
-      "WebFetch"
+      "WebFetch",
+      "mcp__claude_ai_Notion__*",
+      "mcp__claude_ai_Google_Drive__*",
+      "mcp__claude_ai_Google_Docs__*",
+      "mcp__claude_ai_Google_Sheets__*",
+      "NotebookEdit",
+      "Skill"
     ]
   }
 }
